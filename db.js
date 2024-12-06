@@ -5,10 +5,8 @@ const MONGO_URL = process.env.MONGO_URL
 const DB_NAME = process.env.DB_NAME
 
 
-mongoose.connect(MONGO_URL, {
+const connectDB = () => mongoose.connect(MONGO_URL, {
     dbName: DB_NAME
-}).then(()=>{
-    console.log('Connected to database')
-}).catch((err)=>{
-    console.log(`Error connect to database: ${err}`)
 })
+
+module.exports = connectDB
