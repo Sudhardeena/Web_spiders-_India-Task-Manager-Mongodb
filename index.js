@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const userRoutes = require('./routes/userRoutes.js')
+const taskRoutes = require('./routes/taskRoutes.js')
 
 const app = express()
 
@@ -23,7 +24,7 @@ connectDB().then(()=>{
     console.log('Connected to database')
 
     app.use('/users', userRoutes);
-
+    app.use('/tasks', taskRoutes)
 
 
     app.listen(PORT, ()=>{
