@@ -6,7 +6,8 @@ const {
     createTask, 
     GetUserTasks, 
     GetSingleTask,
-    updateSingleTask
+    updateSingleTask,
+    deleteSingleTask
 } = require('../controllers/taskControllers')
 
 const router = express.Router();
@@ -19,6 +20,7 @@ router.post('/', authenticateToken, createTask)
 router.get('/', authenticateToken, GetUserTasks)
 router.get('/:id', authenticateToken, GetSingleTask)
 router.put('/:id', authenticateToken, updateSingleTask)
+router.delete('/:id', authenticateToken, deleteSingleTask)
 
 
 module.exports = router;

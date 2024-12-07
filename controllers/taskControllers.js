@@ -126,3 +126,27 @@ exports.updateSingleTask = async (req, res) => {
         res.status(401).json({message: err.message})
     }
 }
+
+//Soft Deleting single task by setting isDeleted Field to true
+exports.deleteSingleTask = async (req, res) => {
+    try{
+        const taskId = req.params.id
+        const task = await Task.findOne({
+            _id: taskId,
+            owner: req.user._id
+        }).select('-isDeleted')
+
+        if(!task){
+            throw new Error('Task your trying to Delete is not found')
+        }
+
+        task['isDeleted'] = true
+        await task.save();
+
+
+        res.status(204).json({message: 'Updated the task successfully'})
+
+    }catch(err){
+        res.status(401).json({message: err.message})
+    }
+}
