@@ -17,7 +17,7 @@ exports.createTask = async (req, res, next) => {
         
         const taskWithoutIsDeleted = task.toObject();  // Convert Mongoose document to plain object
         delete taskWithoutIsDeleted.isDeleted;
-        res.status(201).json({taskWithoutIsDeleted, message: "Task Created Successfully"})
+        res.status(201).json({task: taskWithoutIsDeleted, message: "Task Created Successfully"})
 
     }catch(err){
         next(err)
