@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 
 
-exports.test = (req,res) => {
-    res.send('User routes are working Properly!')
-}
+// exports.test = (req,res) => {
+//     res.send('User routes are working Properly!')
+// }
 
 exports.register = async (req,res) => {
     try{
