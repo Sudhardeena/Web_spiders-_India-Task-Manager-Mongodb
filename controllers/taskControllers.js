@@ -85,7 +85,7 @@ exports.GetSingleTask = async (req, res) => {
         }).select('-isDeleted')
 
         if(!task){
-            throw new Error('Task Not Found')
+            throw new Error('Task Not Found or Might be deleted')
         }
 
         res.status(201).json(task)
@@ -145,6 +145,30 @@ exports.deleteSingleTask = async (req, res) => {
 
 
         res.status(204).json({message: 'Updated the task successfully'})
+
+    }catch(err){
+        res.status(401).json({message: err.message})
+    }
+}
+
+//Restoring soft deleted task
+exports.restoreTask = async (req, res) => {
+    try{
+        const taskId = req.params.id
+        const task = await Task.findOne({
+            _id: taskId,
+            owner: req.user._id
+        }).select('-isDeleted')
+
+        if(!task){
+            throw new Error('Task your trying to Restore is not exists')
+        }
+
+        task['isDeleted'] = false
+        await task.save();
+
+
+        res.status(201).json({task, message: 'Restored the task successfully'})
 
     }catch(err){
         res.status(401).json({message: err.message})

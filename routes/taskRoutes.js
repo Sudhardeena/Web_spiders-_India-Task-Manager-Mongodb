@@ -7,7 +7,8 @@ const {
     GetUserTasks, 
     GetSingleTask,
     updateSingleTask,
-    deleteSingleTask
+    deleteSingleTask,
+    restoreTask
 } = require('../controllers/taskControllers')
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.get('/', authenticateToken, GetUserTasks)
 router.get('/:id', authenticateToken, GetSingleTask)
 router.put('/:id', authenticateToken, updateSingleTask)
 router.delete('/:id', authenticateToken, deleteSingleTask)
+router.patch('/:id', authenticateToken, restoreTask)
 
 
 module.exports = router;
