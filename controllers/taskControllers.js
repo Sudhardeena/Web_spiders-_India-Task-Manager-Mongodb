@@ -80,7 +80,8 @@ exports.GetSingleTask = async (req, res) => {
         const taskId = req.params.id
         const task = await Task.findOne({
             _id: taskId,
-            owner: req.user._id
+            owner: req.user._id,
+            isDeleted: false
         }).select('-isDeleted')
 
         if(!task){
@@ -88,6 +89,38 @@ exports.GetSingleTask = async (req, res) => {
         }
 
         res.status(201).json(task)
+
+    }catch(err){
+        res.status(401).json({message: err.message})
+    }
+}
+
+//Updating the Task using task id
+exports.updateSingleTask = async (req, res) => {
+    try{
+        const taskId = req.params.id
+        const task = await Task.findOne({
+            _id: taskId,
+            owner: req.user._id
+        }).select('-isDeleted')
+
+        if(!task){
+            throw new Error('Task your trying to update is not found')
+        }
+
+        const allowedUpdateFields = ['title', 'description', 'status', 'priority', 'dueDate']
+        const updateFieldsFromRequestBody = Object.keys(req.body)
+
+        updateFieldsFromRequestBody.forEach(each=> {
+            if(allowedUpdateFields.includes(each)){
+                task[each] = req.body[each]
+            }
+        })
+
+        await task.save();
+
+
+        res.status(201).json({task, message: 'Updated the task successfully'})
 
     }catch(err){
         res.status(401).json({message: err.message})
