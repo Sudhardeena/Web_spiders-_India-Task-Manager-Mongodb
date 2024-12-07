@@ -74,3 +74,22 @@ exports.GetUserTasks = async (req, res) => {
     }
 }
 
+//Get users single task by Id
+exports.GetSingleTask = async (req, res) => {
+    try{
+        const taskId = req.params.id
+        const task = await Task.findOne({
+            _id: taskId,
+            owner: req.user._id
+        }).select('-isDeleted')
+
+        if(!task){
+            throw new Error('Task Not Found')
+        }
+
+        res.status(201).json(task)
+
+    }catch(err){
+        res.status(401).json({message: err.message})
+    }
+}
