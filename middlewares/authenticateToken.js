@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 
 const authenticateToken = (req, res, next) => {
-    let jwtToken 
     try{
         const authHeader = req.headers['authorization']
         if(!authHeader){
@@ -21,9 +20,10 @@ const authenticateToken = (req, res, next) => {
         jwt.verify(jwtToken[1], process.env.JWT_SECRET_KEY, (error, payload)=>{
             if(error){
                 res.status(401).json({message: error.message})
+            }else{
+                req.user = payload
+                next()
             }
-            req.user = payload
-            next()
         })
     }catch(err){
         res.status(401).json({message: err.message})
