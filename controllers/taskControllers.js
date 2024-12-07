@@ -1,11 +1,12 @@
 const Task = require('../models/Task')
+const {HttpError} = require('../middlewares/errorHandler')
 
 // exports.test = (req,res) => {
 //     res.send('Task routes are working Properly!')
 // }
 
 //Task Creation Feature
-exports.createTask = async (req,res) => {
+exports.createTask = async (req, res, next) => {
     try{
         const {_id} = req.user
         const task = new Task({
@@ -19,12 +20,12 @@ exports.createTask = async (req,res) => {
         res.status(201).json({taskWithoutIsDeleted, message: "Task Created Successfully"})
 
     }catch(err){
-        res.status(401).json({message: err.message})
+        next(err)
     }
 }
 
 //Get User Tasks Feature
-exports.GetUserTasks = async (req, res) => {
+exports.GetUserTasks = async (req, res, next) => {
     try{
         const {_id} = req.user
         const status = req.query.status || null
@@ -63,19 +64,19 @@ exports.GetUserTasks = async (req, res) => {
             message = "No Tasks Found Add Some"
         }
 
-        res.status(201).json({
+        res.status(200).json({
             tasks,
             count,
             message
         })
 
     }catch(err){
-        res.status(401).json({message: err.message})
+        next(err)
     }
 }
 
 //Get users single task by Id
-exports.GetSingleTask = async (req, res) => {
+exports.GetSingleTask = async (req, res, next) => {
     try{
         const taskId = req.params.id
         const task = await Task.findOne({
@@ -85,18 +86,18 @@ exports.GetSingleTask = async (req, res) => {
         }).select('-isDeleted')
 
         if(!task){
-            throw new Error('Task Not Found or Might be deleted')
+            throw new HttpError(404, 'Task Not Found or Might be deleted')
         }
 
-        res.status(201).json(task)
+        res.status(200).json(task)
 
     }catch(err){
-        res.status(401).json({message: err.message})
+        next(err)
     }
 }
 
 //Updating the Task using task id
-exports.updateSingleTask = async (req, res) => {
+exports.updateSingleTask = async (req, res, next) => {
     try{
         const taskId = req.params.id
         const task = await Task.findOne({
@@ -105,7 +106,7 @@ exports.updateSingleTask = async (req, res) => {
         }).select('-isDeleted')
 
         if(!task){
-            throw new Error('Task your trying to update is not found')
+            throw new HttpError(404, 'Task your trying to update is not found')
         }
 
         const allowedUpdateFields = ['title', 'description', 'status', 'priority', 'dueDate']
@@ -123,12 +124,12 @@ exports.updateSingleTask = async (req, res) => {
         res.status(201).json({task, message: 'Updated the task successfully'})
 
     }catch(err){
-        res.status(401).json({message: err.message})
+        next(err)
     }
 }
 
 //Soft Deleting single task by setting isDeleted Field to true
-exports.deleteSingleTask = async (req, res) => {
+exports.deleteSingleTask = async (req, res, next) => {
     try{
         const taskId = req.params.id
         const task = await Task.findOne({
@@ -137,7 +138,7 @@ exports.deleteSingleTask = async (req, res) => {
         }).select('-isDeleted')
 
         if(!task){
-            throw new Error('Task your trying to Delete is not found')
+            throw new HttpError(404, 'Task your trying to Delete is not found')
         }
 
         task['isDeleted'] = true
@@ -147,12 +148,12 @@ exports.deleteSingleTask = async (req, res) => {
         res.status(204).json({message: 'Updated the task successfully'})
 
     }catch(err){
-        res.status(401).json({message: err.message})
+        next(err)
     }
 }
 
 //Restoring soft deleted task
-exports.restoreTask = async (req, res) => {
+exports.restoreTask = async (req, res, next) => {
     try{
         const taskId = req.params.id
         const task = await Task.findOne({
@@ -161,7 +162,7 @@ exports.restoreTask = async (req, res) => {
         }).select('-isDeleted')
 
         if(!task){
-            throw new Error('Task your trying to Restore is not exists')
+            throw new HttpError(404, 'Task your trying to Restore is not exists')
         }
 
         task['isDeleted'] = false
@@ -171,6 +172,6 @@ exports.restoreTask = async (req, res) => {
         res.status(201).json({task, message: 'Restored the task successfully'})
 
     }catch(err){
-        res.status(401).json({message: err.message})
+        next(err)
     }
 }

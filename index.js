@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const userRoutes = require('./routes/userRoutes.js')
 const taskRoutes = require('./routes/taskRoutes.js')
+const {errorHandler} = require('./middlewares/errorHandler.js')
 
 const app = express()
 
@@ -26,6 +27,7 @@ connectDB().then(()=>{
     app.use('/users', userRoutes);
     app.use('/tasks', taskRoutes)
 
+    app.use(errorHandler)
 
     app.listen(PORT, ()=>{
         console.log(`Server is running on port ${PORT}`)
