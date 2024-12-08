@@ -1,6 +1,5 @@
 const express = require('express')
-// const {test} = require('../controllers/taskControllers')
-const authenticateToken = require('../middlewares/authenticateToken')
+const authenticateToken = require('../middlewares/authenticateToken') //jwt token authentication middleware
 const {
     createTask, 
     GetUserTasks, 
@@ -8,16 +7,13 @@ const {
     updateSingleTask,
     deleteSingleTask,
     restoreTask
-} = require('../controllers/taskControllers')
+} = require('../controllers/taskControllers') //Controllers for routes
 const {
     joiTaskQueryParameterValidater, 
     joiTaskInputValidater
-} = require('../middlewares/joiInputValidater')
+} = require('../middlewares/joiInputValidater') //Middlewares for Input validation by JOI
 
 const router = express.Router();
-
-
-// router.get('/', authenticateToken, test)
 
 
 router.post('/', authenticateToken, joiTaskInputValidater, createTask) //joi input validation middleware included

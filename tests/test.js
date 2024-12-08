@@ -18,13 +18,13 @@ afterEach(async () => {
 //Successs scenario for Get all User Tasks
 describe("GET /tasks", () => {
     it("should return all tasks 200 with filtering, sorting, pagination", async () => {
-
+        
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzUzOGViYmQ0NTZhOGE1YWE1ZmJhM2IiLCJpYXQiOjE3MzM1NjQzNDh9.3IkL8JAnjbhN-ylquziRD9Gc00AJNLG2qV6t6O18PdE";
         
         const res = await request(app)
-        .get("/tasks?status=IN_PROGRESS&priority=MEDIUM&sort=dueDate&page=1")
-        .set("Authorization", `Bearer ${token}`);
-        expect(res.statusCode).toBe(200);
+        .get("/tasks?status=IN_PROGRESS&priority=MEDIUM&sort=dueDate&page=1")  //API url with query parameters for filtering, sorting, pagination
+        .set("Authorization", `Bearer ${token}`);  //Adding Bearer token to authorization header
+        expect(res.statusCode).toBe(200);  //expected status code from the response
     });
   });
 
@@ -35,9 +35,9 @@ describe("GET /tasks", () => {
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzUzOGViYmQ0NTZhOGE1YWE1ZmJhM2IiLCJpYXQiOjE3MzM1NjQzNDh9.3IkL8JAnjbhN-ylquziRD9Gc00AJNLG2qV6t6O18PdE";
         
         const res = await request(app)
-        .get("/tasks?status=INVALID&priority=INVALID&sort=INVALID&page=INVALID")
-        .set("Authorization", `Bearer ${token}`);
-        expect(res.statusCode).toBe(400);
+        .get("/tasks?status=INVALID&priority=INVALID&sort=INVALID&page=INVALID") //API url with Invalid query parameters 
+        .set("Authorization", `Bearer ${token}`);  
+        expect(res.statusCode).toBe(400);  //expected status code from the response
     });
   });
 
@@ -61,9 +61,9 @@ describe("GET /tasks", () => {
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzUzOGViYmQ0NTZhOGE1YWE1ZmJhM2IiLCJpYXQiOjE3MzM1NjQzNDh9.3IkL8JAnjbhN-ylquziRD9Gc00AJNLG2qV6t6O18PdE";
         
         const res = await request(app)
-        .get("/tasks/605445e2a133992bb34ae03c")
+        .get("/tasks/605445e2a133992bb34ae03c")  //Path parameter with invalid task Id
         .set("Authorization", `Bearer ${token}`);
-        expect(res.statusCode).toBe(404);
+        expect(res.statusCode).toBe(404);  //expected status code from the response
     });
   });
 
@@ -79,7 +79,7 @@ describe("GET /tasks", () => {
         "priority": "HIGH",
         "dueDate": "2024-12-07"
       }).set("Authorization", `Bearer ${token}`);
-      expect(res.statusCode).toBe(201);
+      expect(res.statusCode).toBe(201);  //expected status code from the response
     });
   });
 
@@ -88,13 +88,13 @@ describe("GET /tasks", () => {
     it("should throw error 400 for create a task", async () => {
       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzUzOGViYmQ0NTZhOGE1YWE1ZmJhM2IiLCJpYXQiOjE3MzM1NjQzNDh9.3IkL8JAnjbhN-ylquziRD9Gc00AJNLG2qV6t6O18PdE";
         
-      const res = await request(app).post("/tasks").send({
+      const res = await request(app).post("/tasks").send({  //missing, and invalid values
         "description": "",
         "status": "INVALID",
         "priority": "INVALID",
         "dueDate": "INVALID"
       }).set("Authorization", `Bearer ${token}`);
-      expect(res.statusCode).toBe(400);
+      expect(res.statusCode).toBe(400);  //expected status code from the response
     });
   });
 
@@ -124,7 +124,7 @@ describe("GET /tasks", () => {
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzUzOGViYmQ0NTZhOGE1YWE1ZmJhM2IiLCJpYXQiOjE3MzM1NjQzNDh9.3IkL8JAnjbhN-ylquziRD9Gc00AJNLG2qV6t6O18PdE";
         
         const res = await request(app)
-        .put("/tasks/605445e2a133992bb34ae03c").send({
+        .put("/tasks/605445e2a133992bb34ae03c").send({  //Path parameter with invalid task Id
             "title": "UPDATED task32",
             "description": "this is task32",
             "status": "COMPLETED",
@@ -132,7 +132,7 @@ describe("GET /tasks", () => {
             "dueDate": "2024-12-09"
           })
         .set("Authorization", `Bearer ${token}`);
-        expect(res.statusCode).toBe(404);
+        expect(res.statusCode).toBe(404);  //expected status code from the response
     });
   });
 
@@ -157,9 +157,9 @@ describe("DELETE /tasks/:id", () => {
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzUzOGViYmQ0NTZhOGE1YWE1ZmJhM2IiLCJpYXQiOjE3MzM1NjQzNDh9.3IkL8JAnjbhN-ylquziRD9Gc00AJNLG2qV6t6O18PdE";
         
         const res = await request(app)
-        .delete("/tasks/605445e2a133992bb34ae03c")
+        .delete("/tasks/605445e2a133992bb34ae03c")  //Path parameter with invalid task Id
         .set("Authorization", `Bearer ${token}`);
-        expect(res.statusCode).toBe(404);
+        expect(res.statusCode).toBe(404);  //expected status code from the response
     });
   });
 
@@ -184,8 +184,8 @@ describe("PATCH /tasks/:id", () => {
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzUzOGViYmQ0NTZhOGE1YWE1ZmJhM2IiLCJpYXQiOjE3MzM1NjQzNDh9.3IkL8JAnjbhN-ylquziRD9Gc00AJNLG2qV6t6O18PdE";
         
         const res = await request(app)
-        .patch("/tasks/605445e2a133992bb34ae03c")
+        .patch("/tasks/605445e2a133992bb34ae03c")  //Path parameter with invalid task Id
         .set("Authorization", `Bearer ${token}`);
-        expect(res.statusCode).toBe(404);
+        expect(res.statusCode).toBe(404);  //expected status code from the response
     });
   });

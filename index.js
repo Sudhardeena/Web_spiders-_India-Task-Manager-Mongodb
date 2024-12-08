@@ -8,7 +8,7 @@ const app = express()
 
 require('dotenv').config()
 const PORT = process.env.PORT || 8000;
-const connectDB = require('./db')
+const connectDB = require('./db') //function for mongodb connection
 
 
 app.use(cors())
@@ -23,7 +23,7 @@ app.get('/', (req,res)=> {
 app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes)
 
-app.use(errorHandler)
+app.use(errorHandler) //Error handling Middleware for all api endpoints
 
 //connect to mongodb database before lisenting to requests
 connectDB().then(()=>{
