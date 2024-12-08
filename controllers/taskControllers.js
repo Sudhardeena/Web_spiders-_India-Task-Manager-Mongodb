@@ -38,8 +38,7 @@ exports.GetUserTasks = async (req, res, next) => {
         // console.log(status,priority,sortBy,offset,limit)
 
         const query = {
-            owner: _id,
-            isDeleted: false
+            owner: _id
         }
 
         if(status){

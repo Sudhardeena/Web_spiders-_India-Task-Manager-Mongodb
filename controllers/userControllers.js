@@ -24,7 +24,9 @@ exports.register = async (req, res, next) => {
 
         const user = new User({ username, email, password })
         await user.save()
+
         res.status(201).json({ message: 'User Created Successfully'})
+
     }catch(err){
         next(err)
         // console.log(err)
@@ -45,7 +47,7 @@ exports.login = async (req, res, next) => {
         if(!isMatch){
             throw new HttpError(401, "Invalid password")
         }
-
+        console.log(user._id.toString())
         const jwt_token = jwt.sign( {_id: user._id.toString() }, process.env.JWT_SECRET_KEY)
         res.status(200).json({jwt_token, message: "Logged in successfully"})
 
