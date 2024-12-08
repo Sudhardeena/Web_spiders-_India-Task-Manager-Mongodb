@@ -1,5 +1,32 @@
 const Joi = require('joi')
 
+//Middleware for Joi Task API Query Parameters validation
+exports.joiTaskQueryParameterValidater = (req, res, next) => {
+    const queryParameterSchema = Joi.object({
+        status: Joi.string().valid(...['TODO', 'IN_PROGRESS', 'COMPLETED']),
+        priority: Joi.string().valid(...['LOW', 'MEDIUM', 'HIGH']),
+        sort: Joi.string().valid(...['dueDate', 'createdAt']),
+        page: Joi.number().min(1)
+    }).options({ abortEarly: false });
+
+    const query = {
+        status : req.query.status,
+        priority : req.query.priority,
+        sort : req.query.sort,
+        page : req.query.page
+    }
+    
+
+    const {error} =  queryParameterSchema.validate(query)
+    
+    if(error){
+        // console.log(error)
+        const errorMessages = error.details.map(each => each.message.replaceAll('"', "*")).join(', ')
+        return res.status(400).json({error: 'Query Parameters Validation Error', message: errorMessages})
+    }
+    next()
+}
+
 //Middleware for Joi create and Update Task API Input validation
 exports.joiTaskInputValidater = (req, res, next) => {
     const taskSchema = Joi.object({
