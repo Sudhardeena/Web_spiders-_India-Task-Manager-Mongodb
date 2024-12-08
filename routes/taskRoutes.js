@@ -9,6 +9,7 @@ const {
     deleteSingleTask,
     restoreTask
 } = require('../controllers/taskControllers')
+const {joiTaskInputValidater} = require('../middlewares/joiInputValidater')
 
 const router = express.Router();
 
@@ -16,10 +17,10 @@ const router = express.Router();
 // router.get('/', authenticateToken, test)
 
 
-router.post('/', authenticateToken, createTask)
+router.post('/', authenticateToken, joiTaskInputValidater, createTask) //joi input validation middleware included
 router.get('/', authenticateToken, GetUserTasks)
 router.get('/:id', authenticateToken, GetSingleTask)
-router.put('/:id', authenticateToken, updateSingleTask)
+router.put('/:id', authenticateToken, joiTaskInputValidater, updateSingleTask) //joi input validation middleware included
 router.delete('/:id', authenticateToken, deleteSingleTask)
 router.patch('/:id', authenticateToken, restoreTask)
 
