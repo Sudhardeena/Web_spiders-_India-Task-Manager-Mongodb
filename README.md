@@ -3,6 +3,7 @@ This is a Task Manager API built with Node.js, Express, and MongoDB. The API all
 
 ### Table of Contents
 - Project Setup
+- Unit Test using Jest and superst
 - API Base URL
 - POSTMAN Collection
 - Authentication
@@ -23,8 +24,11 @@ This is a Task Manager API built with Node.js, Express, and MongoDB. The API all
 
 ### Steps to Set Up:
 1. Clone the repository.
-2. Run npm install to install dependencies.
-3. Start the server with npm start.
+2. Run ```npm install``` to install dependencies.
+3. Start the server with ```npm start```.
+
+### To Run Unit Test in test file:
+- Run ```npm run test``` in terminal [without starting the server]
 
 # API Base URL
 All API endpoints can be accessed at the following base URL:
