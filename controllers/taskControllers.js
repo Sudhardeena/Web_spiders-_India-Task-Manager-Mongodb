@@ -134,12 +134,12 @@ exports.deleteSingleTask = async (req, res, next) => {
         const task = await Task.findOne({
             _id: taskId,
             owner: req.user._id,   //Task should match the owner with this value
-        }).select('-isDeleted')  //Skiping the isDeleted field from sending to user
+        })  
 
         if(!task){
             throw new HttpError(404, 'Task your trying to Delete is not exits')  //Throwing custom Error code with message
         }
-
+        // console.log(task.isDeleted)
         if(task.isDeleted === true){ //Enables Only able to delete if isDelete is false
             throw new HttpError(400, 'Task your trying to Delete is already Deleted')
         }
@@ -162,7 +162,7 @@ exports.restoreTask = async (req, res, next) => {
         const task = await Task.findOne({
             _id: taskId,
             owner: req.user._id,  //Task should match the owner with this value
-        }).select('-isDeleted')  //Skiping the isDeleted field from sending to user
+        })
 
         if(!task){
             throw new HttpError(404, 'Task your trying to Restore is not exists')  //Throwing custom Error code with message
@@ -175,8 +175,9 @@ exports.restoreTask = async (req, res, next) => {
         task['isDeleted'] = false //Restoring soft deleted task by changing status of isDeleted field 
         await task.save();
 
-
-        res.status(201).json({task, message: 'Restored the task successfully'})
+        const taskWithoutIsDeleted = task.toObject();  // Convert Mongoose document to plain object for isDeleted key deletion
+        delete taskWithoutIsDeleted.isDeleted;
+        res.status(201).json({task: taskWithoutIsDeleted, message: 'Restored the task successfully'})
 
     }catch(err){
         next(err)
