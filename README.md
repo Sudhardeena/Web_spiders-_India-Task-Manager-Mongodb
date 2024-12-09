@@ -28,7 +28,7 @@ This is a Task Manager API built with Node.js, Express, and MongoDB. The API all
 3. Start the server with ```npm start```.
 
 ### To Run Unit Test in test file:
-- Run ```npm run test``` in terminal [without starting the server]
+- Run ```npm run test``` in terminal [without starting the server with ```npm start```]
 
 # API Base URL
 All API endpoints can be accessed at the following base URL:
