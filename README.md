@@ -218,6 +218,10 @@ Custom error handling is implemented throughout the API. Errors are caught by mi
 - **Input:** username: "existingUser", email: "new@example.com".
 - **Expected Output:** "error": "User already exists"
 
+3. **Test case:** Register with existing email.
+- **Input:** username: "username", email: "new@example.com".
+- **Expected Output:** "error": "email already exists"
+
 ### User Login
 1. **Test case:** Successful login with valid credentials.
 - **Input:** username: "user123", password: "securepassword".
@@ -239,6 +243,22 @@ Custom error handling is implemented throughout the API. Errors are caught by mi
 3. **Test case:** Attempt to update a task without permissions.
 - **Input:** Task ID of another user.
 - **Expected Output:** "error": "Task not found or not authorized"
+
+4. **Test case:** Attempt to delete a task doesn't exist.
+- **Input:** Task Id of task doesn't exist.
+- **Expected Output:** "error": "Task your trying to Delete is not exits"
+
+5. **Test case:** Attempt to delete a task already deleted.
+- **Input:** Task Id of deleted task.
+- **Expected Output:** "error": "Task your trying to Delete is already Deleted"
+
+6. **Test case:** Attempt to restore a task doesn't exist.
+- **Input:** Task Id of task doesn't exist.
+- **Expected Output:** "error": "Task your trying to restore is not exits"
+
+7. **Test case:** Attempt to delete a task not deleted.
+- **Input:** Task Id of existing task.
+- **Expected Output:** "error": "Task your trying to retore is not Deleted"
 
 ### Reference:
 mongoose documentation, joi-: joi documentation, dev.to,Medium.com,GeeksforGeeks, Unit test using Jest and supertest: freecodecamp.org,
