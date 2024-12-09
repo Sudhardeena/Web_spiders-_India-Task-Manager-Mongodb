@@ -133,11 +133,12 @@ exports.deleteSingleTask = async (req, res, next) => {
         const taskId = req.params.id    //Geting task Id from path parameter
         const task = await Task.findOne({
             _id: taskId,
-            owner: req.user._id   //Task should match the owner with this value
+            owner: req.user._id,   //Task should match the owner with this value
+            isDeleted: false   //Enables Only able to delete if isDelete is true
         }).select('-isDeleted')  //Skiping the isDeleted field from sending to user
 
         if(!task){
-            throw new HttpError(404, 'Task your trying to Delete is not found')  //Throwing custom Error code with message
+            throw new HttpError(404, 'Task your trying to Delete is not exits')  //Throwing custom Error code with message
         }
 
         task['isDeleted'] = true  //Executing soft deletion by changing status of isDeleted field
@@ -157,11 +158,12 @@ exports.restoreTask = async (req, res, next) => {
         const taskId = req.params.id    //Geting task Id from path parameter
         const task = await Task.findOne({
             _id: taskId,
-            owner: req.user._id  //Task should match the owner with this value
+            owner: req.user._id,  //Task should match the owner with this value
+            isDeleted: true
         }).select('-isDeleted')  //Skiping the isDeleted field from sending to user
 
         if(!task){
-            throw new HttpError(404, 'Task your trying to Restore is not exists')  //Throwing custom Error code with message
+            throw new HttpError(404, 'Task your trying to Restore is not exists or Deleted')  //Throwing custom Error code with message
         }
 
         task['isDeleted'] = false //Restoring soft deleted task by changing status of isDeleted field 
